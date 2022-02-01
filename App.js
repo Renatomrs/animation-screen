@@ -1,4 +1,5 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+
 import {
   StyleSheet,
   SafeAreaView,
@@ -36,17 +37,7 @@ const renderItem = ({item}) => {
   return (
     <View
       style={[
-        {
-          width: '100%',
-          maxWidth: 300,
-          height: 440,
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderRadius: 40,
-          paddingVertical: 30,
-          paddingHorizontal: 23,
-          backgroundColor: '#474747',
-        },
+        styles.cardDestaque,
         styles.shadow,
       ]}>
       <Image
@@ -61,14 +52,7 @@ const renderItem = ({item}) => {
       </Text>
 
       <TouchableOpacity
-        style={{
-          width: '100%',
-          height: 40,
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: 5,
-          backgroundColor: '#FF9800',
-        }}>
+        style={styles.buttonDestaque}>
         <Text style={{fontWeight: 'bold', color: '#474747'}}>
           Criar um novo anúncio
         </Text>
@@ -80,18 +64,8 @@ const renderItem = ({item}) => {
 const Card = () => {
   return (
     <View
-      style={[
-        {
-          width: (width - 50) / 2,
-          height: 100,
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: 5,
-          marginBottom: 14,
-          backgroundColor: '#474747',
-        },
-        styles.shadow,
-      ]}></View>
+      style={[styles.card, styles.shadow]}
+    ></View>
   );
 };
 
@@ -111,17 +85,18 @@ const App = () => {
     if (value === 'destaque' && previousScreen === 'proximos') {
       console.log('indo da direita para esquerda');
       Animated.timing(animationDestaque, {
-        toValue: -20,
+        toValue: -173,
         duration: 500,
         useNativeDriver: true,
       }).start(() => {
         animationDestaque.setValue(0);
       });
     }
+
     if (value === 'destaque' && previousScreen === 'maps') {
       console.log('indo da direita para esqueda');
       Animated.timing(animationDestaque, {
-        toValue: 20,
+        toValue: 173,
         duration: 500,
         useNativeDriver: true,
       }).start(() => {
@@ -132,37 +107,40 @@ const App = () => {
     if (value === 'proximos' && previousScreen === 'destaque') {
       console.log('indo da esquerda para direita');
       Animated.timing(animationProximos, {
-        toValue: -100,
+        toValue: 175,
         duration: 500,
         useNativeDriver: true,
       }).start(() => {
         animationProximos.setValue(0);
       });
     }
+
     if (value === 'proximos' && previousScreen === 'maps') {
       console.log('indo da esquerda para direita');
       Animated.timing(animationProximos, {
-        toValue: 10,
+        toValue: 175,
         duration: 500,
         useNativeDriver: true,
       }).start(() => {
         animationProximos.setValue(0);
       });
     }
+
     if (value === 'maps' && previousScreen === 'destaque') {
       console.log('indo da esquerda para direita');
       Animated.timing(animationMaps, {
-        toValue: 10,
+        toValue: 175,
         duration: 500,
         useNativeDriver: true,
       }).start(() => {
         animationMaps.setValue(0);
       });
     }
+
     if (value === 'maps' && previousScreen === 'proximos') {
       console.log('indo da esquerda para direita');
       Animated.timing(animationMaps, {
-        toValue: 10,
+        toValue: -175,
         duration: 500,
         useNativeDriver: true,
       }).start(() => {
@@ -209,10 +187,10 @@ const App = () => {
               paddingVertical: 18,
               backgroundColor: '#333',
               transform: [
-                // { scale: 0.5 }
                 {translateX: animationMaps},
               ],
-            }}>
+            }}
+          >
             <View
               style={[
                 {
@@ -236,10 +214,8 @@ const App = () => {
               flex: 1,
               paddingVertical: 18,
               transform: [
-                // { scale: 0.5 }
                 {translateX: animationDestaque},
               ],
-              // backgroundColor: '#F00'
             }}>
             <Carousel
               data={carouselItems}
@@ -260,20 +236,12 @@ const App = () => {
               alignItems: 'center',
               backgroundColor: '#333',
               transform: [
-                // { scale: 0.5 },
                 {translateX: animationProximos},
               ],
             }}>
             <View
-              style={{
-                width: '90%',
-                flex: 1,
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                justifyContent: 'space-between',
-                paddingTop: 18,
-                // backgroundColor: '#F00'
-              }}>
+              style={styles.cardContainer}
+            >
               <Card />
               <Card />
               <Card />
@@ -298,7 +266,7 @@ const styles = StyleSheet.create({
   sectionContainer: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#DDD',
+    backgroundColor: '#333',
   },
   tabs: {
     width: '100%',
@@ -309,21 +277,36 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
   },
   tab: {
-    height: 40,
-    justifyContent: 'center',
-    // backgroundColor: '#0f0',
+    height: 27,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  indicator: {
+    width: '100%',
+    height: 4,
+    borderRadius: 4,
+    backgroundColor: '#FF9800',
   },
   main: {
     width: '100%',
     flex: 1,
-    backgroundColor: '#333',
   },
-  indicator: {
-    width: 67,
-    height: 4,
+  cardContainer: {
+    width: '90%',
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    paddingTop: 18,
+  },
+  card:  {
+    width: (width - 50) / 2,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 5,
-    marginTop: 4,
-    backgroundColor: '#FFF',
+    marginBottom: 14,
+    backgroundColor: '#474747',
   },
   textStrong: {
     fontWeight: '800',
@@ -338,5 +321,24 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
     elevation: 6,
+  },
+  cardDestaque: {
+    width: '100%',
+    maxWidth: 300,
+    height: 440,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderRadius: 40,
+    paddingVertical: 30,
+    paddingHorizontal: 23,
+    backgroundColor: '#474747',
+  },
+  buttonDestaque: {
+    width: '100%',
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    backgroundColor: '#FF9800',
   },
 });
