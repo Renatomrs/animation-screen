@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -7,54 +7,57 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
-  Animated
+  Animated,
 } from 'react-native';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 import Carousel from 'react-native-snap-carousel';
 
 const carouselItems = [
   {
-    image: 'https://images.pexels.com/photos/6976369/pexels-photo-6976369.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-    text: 'Envie uma encomenda a partir de R$ 7.99 e + por mais R$ 1.00 coloque seu anúncio em destaque.'
+    image:
+      'https://images.pexels.com/photos/6976369/pexels-photo-6976369.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+    text: 'Envie uma encomenda a partir de R$ 7.99 e + por mais R$ 1.00 coloque seu anúncio em destaque.',
   },
   {
-    image: 'https://images.pexels.com/photos/577696/pexels-photo-577696.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-    text: 'Envie uma encomenda a partir de R$ 7.99 e + por mais R$ 1.00 coloque seu anúncio em destaque.'
+    image:
+      'https://images.pexels.com/photos/577696/pexels-photo-577696.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+    text: 'Envie uma encomenda a partir de R$ 7.99 e + por mais R$ 1.00 coloque seu anúncio em destaque.',
   },
   {
-    image: 'https://images.pexels.com/photos/3019893/pexels-photo-3019893.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-    text: 'Envie uma encomenda a partir de R$ 7.99 e + por mais R$ 1.00 coloque seu anúncio em destaque.'
+    image:
+      'https://images.pexels.com/photos/3019893/pexels-photo-3019893.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+    text: 'Envie uma encomenda a partir de R$ 7.99 e + por mais R$ 1.00 coloque seu anúncio em destaque.',
   },
 ];
 
 const renderItem = ({item}) => {
   return (
     <View
-      style={[{
-        width: '100%',
-        maxWidth: 300,
-        height: 440,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        borderRadius: 40,
-        paddingVertical: 30,
-        paddingHorizontal: 23,
-        backgroundColor: '#474747',
-      }, styles.shadow]}
-    >
+      style={[
+        {
+          width: '100%',
+          maxWidth: 300,
+          height: 440,
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          borderRadius: 40,
+          paddingVertical: 30,
+          paddingHorizontal: 23,
+          backgroundColor: '#474747',
+        },
+        styles.shadow,
+      ]}>
       <Image
         style={{width: '100%', height: 200, borderRadius: 5}}
-        source={
-          {
-            uri: item.image
-          }
-        }
+        source={{
+          uri: item.image,
+        }}
       />
 
       <Text style={{fontSize: 14, color: '#E1E1E7', lineHeight: 22}}>
-        <Text>{item.text}</Text> 
+        <Text>{item.text}</Text>
       </Text>
 
       <TouchableOpacity
@@ -65,161 +68,203 @@ const renderItem = ({item}) => {
           alignItems: 'center',
           borderRadius: 5,
           backgroundColor: '#FF9800',
-        }}
-      >
-        <Text style={{fontWeight: 'bold', color: '#474747'}}>Criar um novo anúncio</Text>
+        }}>
+        <Text style={{fontWeight: 'bold', color: '#474747'}}>
+          Criar um novo anúncio
+        </Text>
       </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
 
 const Card = () => {
   return (
-    <View 
-      style={[{
-        width: (width - 50) / 2,
-        height: 100,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 5,
-        marginBottom: 14,
-        backgroundColor: '#474747',
-      }, styles.shadow]}
-    >
-    </View>
+    <View
+      style={[
+        {
+          width: (width - 50) / 2,
+          height: 100,
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 5,
+          marginBottom: 14,
+          backgroundColor: '#474747',
+        },
+        styles.shadow,
+      ]}></View>
   );
 };
 
 const Indicator = () => {
-  return (
-    <View style={styles.indicator}/>
-  );
+  return <View style={styles.indicator} />;
 };
 
 const App = () => {
   const [screenControl, setScreenControl] = useState('destaque');
+  const [previousScreen, setPreviousScreen] = useState('destaque');
 
-  const translation = useRef(new Animated.Value(173)).current;
-  const translationD = useRef(new Animated.Value(-173)).current;
+  const animationProximos = useRef(new Animated.Value(0)).current;
+  const animationDestaque = useRef(new Animated.Value(0)).current;
+  const animationMaps = useRef(new Animated.Value(0)).current;
 
-  const changeScreen = (value) => {
+  const changeScreen = value => {
+    if (value === 'destaque' && previousScreen === 'proximos') {
+      console.log('indo da direita para esquerda');
+      Animated.timing(animationDestaque, {
+        toValue: -20,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        animationDestaque.setValue(0);
+      });
+    }
+    if (value === 'destaque' && previousScreen === 'maps') {
+      console.log('indo da direita para esqueda');
+      Animated.timing(animationDestaque, {
+        toValue: 20,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        animationDestaque.setValue(0);
+      });
+    }
+
+    if (value === 'proximos' && previousScreen === 'destaque') {
+      console.log('indo da esquerda para direita');
+      Animated.timing(animationProximos, {
+        toValue: -100,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        animationProximos.setValue(0);
+      });
+    }
+    if (value === 'proximos' && previousScreen === 'maps') {
+      console.log('indo da esquerda para direita');
+      Animated.timing(animationProximos, {
+        toValue: 10,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        animationProximos.setValue(0);
+      });
+    }
+    if (value === 'maps' && previousScreen === 'destaque') {
+      console.log('indo da esquerda para direita');
+      Animated.timing(animationMaps, {
+        toValue: 10,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        animationMaps.setValue(0);
+      });
+    }
+    if (value === 'maps' && previousScreen === 'proximos') {
+      console.log('indo da esquerda para direita');
+      Animated.timing(animationMaps, {
+        toValue: 10,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        animationMaps.setValue(0);
+      });
+    }
+    setPreviousScreen(value);
     setScreenControl(value);
-    
-    if (value === 'destaque') {
-      Animated.timing(translationD, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    }
-
-    if (value === 'proximos') {
-      Animated.timing(translation, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    }
   };
-  
+
   return (
     <SafeAreaView style={styles.sectionContainer}>
       <View style={styles.tabs}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.tab}
-          onPress={() => changeScreen('maps')}
-        >
-          <Text style={{color: '#FFF', fontWeight: 'bold'}}>
-            Ver Mapa
-          </Text>
+          onPress={() => changeScreen('maps')}>
+          <Text style={{color: '#FFF', fontWeight: 'bold'}}>Ver Mapa</Text>
+          {screenControl === 'maps' && <Indicator />}
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.tab}
-          onPress={() => changeScreen('destaque')}
-        >
-          <Text style={{color: '#FFF', fontWeight: 'bold'}}>
-            Destaques
-          </Text>
-          <Indicator />
+          onPress={() => changeScreen('destaque')}>
+          <Text style={{color: '#FFF', fontWeight: 'bold'}}>Destaques</Text>
+          {screenControl === 'destaque' && <Indicator />}
         </TouchableOpacity>
-            
+
         <TouchableOpacity
           style={styles.tab}
-          onPress={() => changeScreen('proximos')}
-        >
-          <Text style={{color: '#FFF', fontWeight: 'bold'}}>
-            Próximos
-          </Text>
+          onPress={() => changeScreen('proximos')}>
+          <Text style={{color: '#FFF', fontWeight: 'bold'}}>Próximos</Text>
+          {screenControl === 'proximos' && <Indicator />}
         </TouchableOpacity>
       </View>
 
       <View style={styles.main}>
         {screenControl === 'maps' && (
-          <View 
-            style={{ 
+          <Animated.View
+            style={{
               width: '100%',
               flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
               paddingVertical: 18,
               backgroundColor: '#333',
-            }}
-          >
-            <View 
-              style={[{
-                width: '90%',
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 5,
-                backgroundColor: '#474747',
-              }, styles.shadow]}
-            >
-              <Text style={{fontSize: 18 ,color: '#E1E1E7'}}>
-                Maps here!
-              </Text>
+              transform: [
+                // { scale: 0.5 }
+                {translateX: animationMaps},
+              ],
+            }}>
+            <View
+              style={[
+                {
+                  width: '90%',
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 5,
+                  backgroundColor: '#474747',
+                },
+                styles.shadow,
+              ]}>
+              <Text style={{fontSize: 18, color: '#E1E1E7'}}>Maps here!</Text>
             </View>
-          </View>
+          </Animated.View>
         )}
 
-          {screenControl === 'destaque' && (
-            <Animated.View 
-              style={{
-                flex: 1,
-                paddingVertical: 18,
-                transform: [
-                  // { scale: 0.5 }
-                  { translateX: translationD },
-                ],
-                // backgroundColor: '#F00'
-              }}
-            >
-              <Carousel 
-                data={carouselItems}
-                layout='default'
-                layoutCardOffset={3}
-                sliderWidth={340}
-                itemWidth={250}
-                renderItem={renderItem}
-              />
-            </Animated.View>
-          )}
+        {screenControl === 'destaque' && (
+          <Animated.View
+            style={{
+              flex: 1,
+              paddingVertical: 18,
+              transform: [
+                // { scale: 0.5 }
+                {translateX: animationDestaque},
+              ],
+              // backgroundColor: '#F00'
+            }}>
+            <Carousel
+              data={carouselItems}
+              layout="default"
+              layoutCardOffset={3}
+              sliderWidth={340}
+              itemWidth={250}
+              renderItem={renderItem}
+            />
+          </Animated.View>
+        )}
 
-          {screenControl === 'proximos' && (
-            <Animated.View
-              style={{
-                width: '100%',
-                flex: 1, 
-                alignItems: 'center',
-                backgroundColor: '#333',
-                transform: [
-                  // { scale: 0.5 },
-                  { translateX: translation },
-                ]
-              }}
-            >
-            <View 
+        {screenControl === 'proximos' && (
+          <Animated.View
+            style={{
+              width: '100%',
+              flex: 1,
+              alignItems: 'center',
+              backgroundColor: '#333',
+              transform: [
+                // { scale: 0.5 },
+                {translateX: animationProximos},
+              ],
+            }}>
+            <View
               style={{
                 width: '90%',
                 flex: 1,
@@ -228,20 +273,18 @@ const App = () => {
                 justifyContent: 'space-between',
                 paddingTop: 18,
                 // backgroundColor: '#F00'
-              }}
-            >
-          
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          </View>
+              }}>
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+            </View>
           </Animated.View>
         )}
       </View>
@@ -283,8 +326,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   textStrong: {
-    fontWeight: '800', 
-    color: '#FFF'
+    fontWeight: '800',
+    color: '#FFF',
   },
   shadow: {
     shadowColor: '#000',
